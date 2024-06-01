@@ -12,3 +12,5 @@ email Id: saumya4@gmail.com
 password: 12345
 
 Backend is working great with postman but might have issue sometimes with frontend while creating new user by admin but if i login as user i'm getting the data added by admin through excel file
+This repository have 3 branches - frontend, backend, main. You can find the corresponding code in the relevant branches.
+
