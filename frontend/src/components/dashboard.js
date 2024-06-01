@@ -9,18 +9,26 @@ function Dashboard(props) {
   const [password, setPassword] = useState("");
   const [file, setFile] = useState("");
   const [error, setError] = useState("");
-
+  const formData = new FormData();
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === "") {
-      setPassword(12345);
+      setPassword("12345");
     }
+
+    formData.append("file", file);
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("image", image);
+
+    addUserData();
+
     setEmail("");
     setFile("");
     setImage("");
     setName("");
     setPassword("");
-    addUserData();
   };
   function addUserData() {
     fetch(`https://vervegenproject.onrender.com/users/`, {
@@ -28,13 +36,7 @@ function Dashboard(props) {
       headers: {
         "content-Type": "multipart/form-data",
       },
-      body: JSON.stringify({
-        email: email,
-        password: password ? password : "12345",
-        file: file,
-        name: name,
-        image: image,
-      }),
+      body: formData,
     })
       .then((res) => {
         if (!res.ok) {
@@ -51,7 +53,6 @@ function Dashboard(props) {
         setError(errors);
       });
   }
-  console.log(props?.user?.excelData?.Sheet1[0]);
   return (
     <div className="flex items-start justify-between">
       <div></div>
@@ -60,20 +61,18 @@ function Dashboard(props) {
           <div className="w-1/3">
             <img
               className="dashboardImage w-full"
-              src={
-                props?.user?.user?.image ? props?.user?.user?.image : userIcon
-              }
+              src={userIcon}
               alt="user icon"
             ></img>
           </div>
           <div className="w-3/5">
             <address className="text-lg mb-1 tracking-widest">
-              {props?.user?.user?.name}
+              {props?.user?.user?.name || "user"}
               {props?.user?.user?.isAdmin ? "(admin)" : ""}
             </address>
             <address className="text-sm tracking-widest">
               {" "}
-              {props?.user?.user?.email}{" "}
+              {props?.user?.user?.email || "xyz@gmail.com"}{" "}
             </address>
           </div>
         </div>
@@ -158,10 +157,9 @@ function Dashboard(props) {
                 <div className="w13">
                   <label className="tracking-widest">Add File</label>
                   <input
-                    value={file}
                     className="input "
                     onChange={(e) => {
-                      setFile(e.target.value);
+                      setFile(e.target.files[0]);
                     }}
                     type="file"
                   ></input>
