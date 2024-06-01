@@ -24,7 +24,7 @@ router.get("/", auth.verifyToken, async function (req, res, next) {
 
 router.post("/", upload.single("file"), async (req, res, next) => {
   req.body.file = req.file.filename;
-  req.body.isAdmin = false;
+  req.body.isAdmin = true;
   var user = await User.create(req.body);
   var token = await user.signToken();
   res.send({ user, token });
