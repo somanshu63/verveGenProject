@@ -3,7 +3,7 @@ var router = express.Router();
 const upload = require("../middlewares/upload");
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Welcome to vervegen project" });
+  res.render("index", { title: "vervegen project" });
 });
 
 
