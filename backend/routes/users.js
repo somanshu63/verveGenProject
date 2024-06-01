@@ -31,6 +31,7 @@ router.get("/", auth.verifyToken, async function (req, res, next) {
 });
 
 router.post("/", upload.single("file"), async (req, res, next) => {
+  console.log(req.file, req.body);
   const fileContent = fs.readFileSync(req.file.path);
   const params = {
     Bucket: "vervegen",
