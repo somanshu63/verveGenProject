@@ -1,9 +1,11 @@
 import { useState } from "react";
-function Login() {
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const history = useHistory();
   function handleSubmit(e) {
     e.preventDefault();
     setEmailError("");
@@ -17,8 +19,39 @@ function Login() {
       } else {
         setEmail("");
         setPassword("");
+        login();
       }
     }
+  }
+  function login() {
+    fetch(`https://vervegenproject.onrender.com/users/login`, {
+      method: "POST",
+      headers: {
+        "content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then((res) => {
+        console.log(res);
+        if (!res.ok) {
+          return res.json().then(({ errors }) => {
+            return Promise.reject(errors);
+          });
+        }
+        return res.json();
+      })
+      .then((user) => {
+        console.log(user);
+        props.setUser(user);
+
+        history.push("/dashboard");
+      })
+      .catch((errors) => {
+        setError(errors);
+      });
   }
   return (
     <div className="flex loginContainer justify-center items-center ">
