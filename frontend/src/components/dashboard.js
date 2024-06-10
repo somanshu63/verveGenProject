@@ -77,7 +77,7 @@ function Dashboard(props) {
           </div>
         </div>
         <hr></hr>
-        {props?.user?.user?.isAdmin ? (
+        // {props?.user?.user?.isAdmin ? (
           <button
             onClick={() => {
               setAddUser(!addUser);
@@ -86,12 +86,12 @@ function Dashboard(props) {
           >
             Add User{" "}
           </button>
-        ) : (
-          ""
-        )}
+        // ) : (
+        //   ""
+        // )}
       </div>
       <div className="p-24 w-4/5">
-        {addUser ? (
+        // {addUser ? (
           <div>
             <form onSubmit={handleSubmit}>
               <div className="flex items-start justify-between">
@@ -170,7 +170,7 @@ function Dashboard(props) {
               </div>
             </form>
           </div>
-        ) : (
+        // ) : (
           <table>
             <tbody>
               {props?.user?.excelData?.Sheet1?.map((data, i) => {
@@ -192,7 +192,7 @@ function Dashboard(props) {
               })}
             </tbody>
           </table>
-        )}
+        // )}
       </div>
     </div>
   );
