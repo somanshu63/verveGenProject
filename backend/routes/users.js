@@ -31,24 +31,24 @@ router.get("/", auth.verifyToken, async function (req, res, next) {
 });
 
 router.post("/", upload.single("file"), async (req, res, next) => {
-  console.log(req.file, req.body);
-  const fileContent = fs.readFileSync(req.file.path);
-  const params = {
-    Bucket: "vervegen",
-    Key: req.file.originalname,
-    Body: fileContent,
-    ContentType: req.file.mimetype,
-  };
-  s3.upload(params, async (err, data) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    req.body.file = req.file.originalname;
-    req.body.isAdmin = false;
-    var user = await User.create(req.body);
-    var token = await user.signToken();
-    res.send({ user, token });
-  });
+  // console.log(req.file, req.body);
+  // const fileContent = fs.readFileSync(req.file.path);
+  // const params = {
+  //   Bucket: "vervegen",
+  //   Key: req.file.originalname,
+  //   Body: fileContent,
+  //   ContentType: req.file.mimetype,
+  // };
+  // s3.upload(params, async (err, data) => {
+  //   if (err) {
+  //     return res.status(500).send(err);
+  //   }
+  req.body.file = req.file.filename;
+  req.body.isAdmin = false;
+  var user = await User.create(req.body);
+  var token = await user.signToken();
+  res.send({ user, token });
+  // });
 });
 
 router.post("/login", async (req, res, next) => {
@@ -66,20 +66,20 @@ router.post("/login", async (req, res, next) => {
   }
   console.log(user);
   try {
-    const params = {
-      Bucket: "vervegen",
-      Key: user.file,
-    };
-    s3.getObject(params, async (err, data) => {
-      if (err) {
-        return res.status(500).send(err);
-      }
-      var token = await user.signToken();
-      const excelData = excelToJson({
-        source: data.Body,
-      });
-      res.status(200).json({ user, token, excelData });
+    // const params = {
+    //   Bucket: "vervegen",
+    //   Key: user.file,
+    // };
+    // s3.getObject(params, async (err, data) => {
+    //   if (err) {
+    //     return res.status(500).send(err);
+    //   }
+    var token = await user.signToken();
+    const excelData = excelToJson({
+      sourceFile: "uploads/" + user.file,
     });
+    res.status(200).json({ user, token, excelData });
+    // });
   } catch (error) {
     next(error);
   }
